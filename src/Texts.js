@@ -7,21 +7,25 @@ class Texts extends Component {
     super(props);
 
     this.state = {
-      toTexts: getTestToTexts(),
-      fromTexts: getTestFromTexts(),
+      toTexts: getDefualtToTexts(),
+      fromTexts: getDefualtFromTexts(),
     };
   }
 
   async componentDidMount() {
     try {
+      const [toTexts, fromTexts] = await Promise.all([
+        this.fetchToTexts(),
+        this.fetchFromTexts(),
+      ]);
       this.setState({
-        toTexts: await this.fetchToTexts(),
-        fromTexts: await this.fetchFromTexts(),
+        toTexts,
+        fromTexts,
       });
     } catch (error) {
       console.error(error);
       this.setState({
-        errorMessage: 'Failed to load texts',
+        errorMessage: 'Failed to load texts from server',
       });
     }
   }
@@ -37,30 +41,23 @@ class Texts extends Component {
     );
   }
   async fetchTextsFrom(url) {
-    const response = await axios(url, {
-      method: 'GET',
-      mode: 'no-cors',
-      headers: {
-        'Access-Control-Allow-Origin': '*',
-        'Content-Type': 'application/json',
-      },
-      withCredentials: true,
-      credentials: 'same-origin',
-    });
+    const response = await axios.get(url);
     return response.data.texts;
   }
   mergeToAndFromTexts() {
-    const { toTexts, fromTexts } = this.state;
-    return this.mergeTexts(toTexts, fromTexts);
-  }
-  mergeTexts(toTexts, fromTexts) {
-    return toTexts
-      .map(text => this.addDirectionToText('to', text))
-      .concat(fromTexts.map(text => this.addDirectionToText('from', text)))
-      .sort(this.sortByTime);
+    const toTexts = this.state.toTexts.map(text =>
+      this.addDirectionToText('to', text)
+    );
+    const fromTexts = this.state.fromTexts.map(text =>
+      this.addDirectionToText('from', text)
+    );
+    return this.combineAndSortTexts(toTexts, fromTexts);
   }
   addDirectionToText(direction, text) {
     return Object.assign({ direction }, text);
+  }
+  combineAndSortTexts(toTexts, fromTexts) {
+    return toTexts.concat(fromTexts).sort(this.sortByTime);
   }
   sortByTime(text1, text2) {
     return text1.time - text2.time;
@@ -86,7 +83,7 @@ class Texts extends Component {
 
 export default Texts;
 
-function getTestToTexts() {
+function getDefualtToTexts() {
   return [
     {
       text:
@@ -172,7 +169,7 @@ function getTestToTexts() {
   ];
 }
 
-function getTestFromTexts() {
+function getDefualtFromTexts() {
   return [
     {
       text: 'Kale chips Blue Bottle.',
