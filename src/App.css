@@ -1,0 +1,12 @@
+.text-container {
+  max-width: 360px;
+  margin: auto;
+}
+
+.to {
+  color: '2F97FA';
+}
+
+.from {
+  color: 'E4E4E4';
+}
