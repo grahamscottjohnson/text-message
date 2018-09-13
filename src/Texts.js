@@ -37,13 +37,15 @@ class Texts extends Component {
     );
   }
   async fetchTextsFrom(url) {
-    const response = await axios.get(url, {
+    const response = await axios(url, {
+      method: 'GET',
+      mode: 'no-cors',
       headers: {
         'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods':
-          'GET, POST, PATCH, PUT, DELETE, OPTIONS',
-        'Access-Control-Allow-Headers': 'Origin, Content-Type, X-Auth-Token',
+        'Content-Type': 'application/json',
       },
+      withCredentials: true,
+      credentials: 'same-origin',
     });
     return response.data.texts;
   }
@@ -53,7 +55,7 @@ class Texts extends Component {
   }
   mergeTexts(toTexts, fromTexts) {
     return toTexts
-      .map(text => this.addDirectionToText('from', text))
+      .map(text => this.addDirectionToText('to', text))
       .concat(fromTexts.map(text => this.addDirectionToText('from', text)))
       .sort(this.sortByTime);
   }

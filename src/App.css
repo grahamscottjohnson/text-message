@@ -1,12 +1,24 @@
 .text-container {
   max-width: 360px;
   margin: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 .to {
-  color: '2F97FA';
+  background-color: #2f97fa;
+  align-self: flex-end;
 }
 
 .from {
-  color: 'E4E4E4';
+  background-color: #e4e4e4;
+  align-self: flex-start;
+}
+
+.textBlob {
+  margin-top: 3px;
+  margin-bottom: 3px;
+  max-width: 80%;
+  border-radius: 5px;
+  padding: 6px;
 }
