@@ -1,15 +1,20 @@
 import React, { Component, Fragment } from 'react';
 import axios from 'axios';
-import TextBlob from './TextBlob';
+import TextBox from './TextBox';
+import PageChanger from './PageChanger';
 
 class Texts extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      toTexts: getDefualtToTexts(),
-      fromTexts: getDefualtFromTexts(),
+      toTexts: getTestToTexts(),
+      fromTexts: getTestFromTexts(),
+      page: this.props.page || 1,
     };
+
+    this.incrementPage = this.incrementPage.bind(this);
+    this.decrementPage = this.decrementPage.bind(this);
   }
 
   async componentDidMount() {
@@ -40,42 +45,36 @@ class Texts extends Component {
       'https://gv-text-api.herokuapp.com/api/texts/from'
     );
   }
+
   async fetchTextsFrom(url) {
     const response = await axios.get(url);
     return response.data.texts;
   }
-  mergeToAndFromTexts() {
-    const toTexts = this.state.toTexts.map(text =>
-      this.addDirectionToText('to', text)
-    );
-    const fromTexts = this.state.fromTexts.map(text =>
-      this.addDirectionToText('from', text)
-    );
-    return this.combineAndSortTexts(toTexts, fromTexts);
+
+  incrementPage() {
+    this.setState({
+      page: this.state.page + 1,
+    });
   }
-  addDirectionToText(direction, text) {
-    return Object.assign({ direction }, text);
-  }
-  combineAndSortTexts(toTexts, fromTexts) {
-    return toTexts.concat(fromTexts).sort(this.sortByTime);
-  }
-  sortByTime(text1, text2) {
-    return text1.time - text2.time;
+  decrementPage() {
+    this.setState({
+      page: this.state.page - 1,
+    });
   }
 
   render() {
-    const texts = this.mergeToAndFromTexts();
-    // return this.state.errorMessage ? (
-    //   <div>{this.state.errorMessage}</div>
-    // ) : (
-    //   <Fragment>{texts}</Fragment>
-    // );
+    const page = this.state.page;
+    const textsPerPage = this.props.textsPerPage || 10;
     return (
       <Fragment>
         {this.state.errorMessage && <div>{this.state.errorMessage}</div>}
-        {texts.map(text => {
-          return <TextBlob key={text.time} text={text} />;
-        })}
+        <TextBox
+          toTexts={this.state.toTexts}
+          fromTexts={this.state.fromTexts}
+          page={page}
+          textsPerPage={textsPerPage}
+        />
+        <PageChanger />
       </Fragment>
     );
   }
@@ -83,7 +82,7 @@ class Texts extends Component {
 
 export default Texts;
 
-function getDefualtToTexts() {
+function getTestToTexts() {
   return [
     {
       text:
@@ -169,7 +168,7 @@ function getDefualtToTexts() {
   ];
 }
 
-function getDefualtFromTexts() {
+function getTestFromTexts() {
   return [
     {
       text: 'Kale chips Blue Bottle.',
