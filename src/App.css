@@ -16,9 +16,25 @@
 }
 
 .textBlob {
-  margin-top: 3px;
-  margin-bottom: 3px;
+  margin: 3px;
   max-width: 80%;
   border-radius: 5px;
   padding: 6px;
+}
+
+.pageChanger {
+  margin: 3px;
+}
+
+.pageButton {
+  width: 40px;
+  font-size: 20px;
+}
+
+.prev {
+  float: left;
+}
+
+.next {
+  float: right;
 }

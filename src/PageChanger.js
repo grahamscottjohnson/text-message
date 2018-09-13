@@ -4,14 +4,14 @@ export default ({ page, numberOfPages, incrementPage, decrementPage }) => {
   return (
     <div className="pageChanger">
       {page !== 1 && (
-        <span className="prev" onClick={decrementPage}>
-          Prev
-        </span>
+        <button className="prev pageButton" onClick={decrementPage}>
+          {'<'}
+        </button>
       )}
       {page !== numberOfPages && (
-        <span className="next" onClick={incrementPage}>
-          Next
-        </span>
+        <button className="next pageButton" onClick={incrementPage}>
+          {'>'}
+        </button>
       )}
     </div>
   );

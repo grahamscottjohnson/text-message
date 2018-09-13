@@ -65,6 +65,9 @@ class Texts extends Component {
   render() {
     const page = this.state.page;
     const textsPerPage = this.props.textsPerPage || 10;
+    const numberOfPages = Math.ceil(
+      (this.state.toTexts.length + this.state.fromTexts.length) / textsPerPage
+    );
     return (
       <Fragment>
         {this.state.errorMessage && <div>{this.state.errorMessage}</div>}
@@ -74,7 +77,12 @@ class Texts extends Component {
           page={page}
           textsPerPage={textsPerPage}
         />
-        <PageChanger />
+        <PageChanger
+          page={page}
+          numberOfPages={numberOfPages}
+          incrementPage={this.incrementPage}
+          decrementPage={this.decrementPage}
+        />
       </Fragment>
     );
   }
