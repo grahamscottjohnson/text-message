@@ -6,7 +6,7 @@ class App extends Component {
   render() {
     return (
       <div className="text-container">
-        <Texts page={1} />
+        <Texts page={1} textsPerPage={10} />
       </div>
     );
   }
