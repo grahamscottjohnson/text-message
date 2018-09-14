@@ -15,14 +15,20 @@ export default class Texts extends Component {
 
     this.incrementPage = this.incrementPage.bind(this);
     this.decrementPage = this.decrementPage.bind(this);
+    this.loadTexts = this.loadTexts.bind(this);
   }
 
   async componentDidMount() {
+    await this.loadTexts();
+  }
+
+  async loadTexts() {
     try {
       const [toTexts, fromTexts] = await this.fetchToAndFromTexts();
       this.setState({
         toTexts,
         fromTexts,
+        page: this.props.page || 1,
       });
     } catch (error) {
       console.error(error);
@@ -44,6 +50,8 @@ export default class Texts extends Component {
     const response = await axios.get(url);
     return response.data.texts;
   }
+
+  loadOtherTexts() {}
 
   incrementPage() {
     this.setState({
@@ -82,6 +90,9 @@ export default class Texts extends Component {
           incrementPage={this.incrementPage}
           decrementPage={this.decrementPage}
         />
+        <button className="pageButton center" onClick={this.loadTexts}>
+          Load Other Texts
+        </button>
       </Fragment>
     );
   }

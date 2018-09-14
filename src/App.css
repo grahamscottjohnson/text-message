@@ -27,8 +27,10 @@
 }
 
 .pageButton {
-  width: 40px;
+  margin: 3px auto;
+  padding: 5px 15px;
   font-size: 20px;
+  max-width: 75%;
 }
 
 .prev {
@@ -37,4 +39,8 @@
 
 .next {
   float: right;
+}
+
+.center {
+  text-align: center;
 }
